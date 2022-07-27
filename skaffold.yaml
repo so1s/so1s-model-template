@@ -1,0 +1,15 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+metadata:
+  name: build-files
+build:
+  artifacts:
+  - image: so1s/torch-build
+    docker:
+      dockerfile: dockerfile
+  local:
+    push: true
+deploy:
+  kubectl:
+    manifests:
+    - pod.yaml
