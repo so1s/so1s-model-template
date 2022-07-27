@@ -1,19 +1,14 @@
-# 1.bentoml bundling
-while :
-do
-    if [ ! -d /root/bentoml/repository ]; 
-    then
-        echo "bentoml bundling..."
-        python3.8 /apps/src/main.py
-    else
-        echo "bentoml bundle is created."
-        break
-    fi
-    sleep 1
-done
+# 1. bentoml bundle
+python3.8 /apps/src/main.py
 
-# 2. bentoml containerizing
-bentoml containerize TransformerService:latest -t $1:$2
+# 2. bentoml build
+cd /apps
+echo "bentoml build ---"
+bentoml build
+
+# 2. bentoml containerize
+echo "bentoml containerize ---"
+bentoml containerize iris_classifier:latest -t $1:$2 --network host --verbose
 
 # 3. docker push
 echo "$3" | docker login --username so1s --password-stdin
