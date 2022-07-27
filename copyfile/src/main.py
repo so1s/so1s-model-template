@@ -1,47 +1,29 @@
-import bentoml
-from bentoml.adapters import JsonInput
-from bentoml.frameworks.transformers import TransformersModelArtifact
 import numpy as np
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from bentoml.io import NumpyNdarray
+import bentoml
+
+from sklearn import svm
+from sklearn import datasets
+
+# Load training data set
+iris = datasets.load_iris()
+X, y = iris.data, iris.target
+
+# Train the model
+clf = svm.SVC(gamma='scale')
+clf.fit(X, y)
+
+# Save model to the BentoML local model store
+saved_model = bentoml.sklearn.save_model("iris_classifier", clf)
+print(f"Model saved: {saved_model}")
+
+iris_classifier_runner = bentoml.sklearn.get(
+    "iris_classifier:latest").to_runner()
+
+svc = bentoml.Service("iris_classifier", runners=[iris_classifier_runner])
 
 
-@bentoml.env(pip_packages=["transformers==4.11.0", "torch==1.7.0"])
-@bentoml.artifacts([TransformersModelArtifact("transformer")])
-class TransformerService(bentoml.BentoService):
-    LABELS = {
-        0: "부정",
-        1: "긍정"
-    }
-
-    @bentoml.api(input=JsonInput(), batch=False)
-    def predict(self, parsed_json):
-        src_text = parsed_json.get("text")
-
-        model = self.artifacts.transformer.get("model")
-        tokenizer = self.artifacts.transformer.get("tokenizer")
-
-        # Pre-processing
-        input_ids = tokenizer.encode(src_text, return_tensors="pt")
-
-        # Model forward
-        output = model(input_ids)
-
-        # Post-processing
-        preds = output.logits.detach().cpu().numpy()
-        preds = np.argmax(preds, axis=1)
-
-        return {
-            "result": self.LABELS[preds[0]]
-        }
-
-if __name__ == "__main__":
-    ts = TransformerService()
-
-    model_name = "monologg/koelectra-small-finetuned-nsmc"
-    model = AutoModelForSequenceClassification.from_pretrained(model_name)
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
-    artifact = {"model": model, "tokenizer": tokenizer}
-
-    ts.pack("transformer", artifact)
-    saved_path = ts.save()
-    print(saved_path)
+@svc.api(input=NumpyNdarray(), output=NumpyNdarray())
+def classify(input_series: np.ndarray) -> np.ndarray:
+    result = iris_classifier_runner.predict.run(input_series)
+    return result
