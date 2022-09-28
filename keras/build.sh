@@ -151,12 +151,12 @@ bentoml build
 
 # 5. bentoml containerizing
 echo "============================CONTAINERIZATION START============================" >&1
-echo "bentoml containerize $MODEL_NAME:latest -t so1s-registry/$MODEL_NAME:$TAG --network host --verbose --platform=linux/amd64" >&1
-bentoml containerize $MODEL_NAME:latest -t so1s-registry/$MODEL_NAME:$TAG --network host --verbose --platform=linux/amd64
+echo "bentoml containerize $MODEL_NAME:latest -t so1s-registry:5000/$MODEL_NAME:$TAG --network host --verbose --platform=linux/amd64" >&1
+bentoml containerize $MODEL_NAME:latest -t so1s-registry:5000/$MODEL_NAME:$TAG --network host --verbose --platform=linux/amd64
 
 # 6. docker push
 echo "============================CONTAINERIZATION PUSH=============================" >&1
-echo "docker push so1s-registry/$MODEL_NAME:$TAG"
-docker push so1s-registry/$MODEL_NAME:$TAG
+echo "docker push so1s-registry:5000/$MODEL_NAME:$TAG"
+docker push so1s-registry:5000/$MODEL_NAME:$TAG
 
 exit 0
