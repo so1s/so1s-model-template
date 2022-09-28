@@ -62,8 +62,6 @@ while (("$#")); do
             echo "      -o | --output     (set inference output type)" >&2
             echo "      -n | --name       (set model name)" >&2
             echo "      -t | --tag        (set image tag)" >&2
-            echo "      -u | --user       (set image registry username)" >&2
-            echo "      -p | --password   (set image registry password)" >&2
             exit 0
             ;;
         -*|--*) # unsupported flags
