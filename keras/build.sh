@@ -6,8 +6,6 @@ INPUT_TYPE=""
 OUTPUT_TYPE=""
 MODEL_NAME=""
 TAG=""
-USERNAME=""
-PASSWORD=""
 
 # 0. parsed options
 while (("$#")); do
@@ -57,24 +55,6 @@ while (("$#")); do
                 exit 1
             fi
             ;;
-        -u|--user) # set image registry password
-            if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
-                USERNAME=$2
-                shift 2
-            else
-                echo "Error : please input '-u {USERNAME}' Argument." >&2
-                exit 1
-            fi
-            ;;
-        -p|--password) # set image registry password
-            if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
-                PASSWORD=$2
-                shift 2
-            else
-                echo "Error : please input '-p {PASSWORD}' Argument." >&2
-                exit 1
-            fi
-            ;;
         -h|--help) # help
             echo "Usage: $0 -i <input_type>" >&2
             echo "      -f | --file       (set custom file url)" >&2
@@ -82,8 +62,6 @@ while (("$#")); do
             echo "      -o | --output     (set inference output type)" >&2
             echo "      -n | --name       (set model name)" >&2
             echo "      -t | --tag        (set image tag)" >&2
-            echo "      -u | --user       (set image registry username)" >&2
-            echo "      -p | --password   (set image registry password)" >&2
             exit 0
             ;;
         -*|--*) # unsupported flags
@@ -105,7 +83,6 @@ echo "INPUT_TYPE   : $INPUT_TYPE" >&1
 echo "OUTPUT_TYPE  : ${OUTPUT_TYPE}" >&1
 echo "NAME         : ${MODEL_NAME}" >&1
 echo "TAG          : ${TAG}" >&1
-echo "USERNAME     : ${USERNAME}" >&1
 echo ""
 echo ""
 
@@ -128,14 +105,6 @@ if [ -z $MODEL_NAME ]; then
 fi
 if [ -z $TAG ];then 
     echo "Please Input [ -t | --tag ] Options" >&2
-    exit 1
-fi
-if [ -z $USERNAME ]; then
-    echo "Please Input [ -u | --user ] Options" >&2
-    exit 1
-fi
-if [ -z $PASSWORD ]; then
-    echo "Please Input [ -p | --password ] Options" >&2
     exit 1
 fi
 
@@ -182,13 +151,12 @@ bentoml build
 
 # 5. bentoml containerizing
 echo "============================CONTAINERIZATION START============================" >&1
-echo "bentoml containerize $MODEL_NAME:latest -t $USERNAME/$MODEL_NAME:$TAG --network host --verbose --platform=linux/amd64" >&1
-bentoml containerize $MODEL_NAME:latest -t $USERNAME/$MODEL_NAME:$TAG --network host --verbose --platform=linux/amd64
+echo "bentoml containerize $MODEL_NAME:latest -t so1s-registry:5000/$MODEL_NAME:$TAG --network host --verbose --platform=linux/amd64" >&1
+bentoml containerize $MODEL_NAME:latest -t so1s-registry:5000/$MODEL_NAME:$TAG --network host --verbose --platform=linux/amd64
 
 # 6. docker push
 echo "============================CONTAINERIZATION PUSH=============================" >&1
-echo "$PASSWORD" | docker login --username $USERNAME --password-stdin
-echo "docker push $USERNAME/$MODEL_NAME:$TAG"
-docker push $USERNAME/$MODEL_NAME:$TAG
+echo "docker push so1s-registry:5000/$MODEL_NAME:$TAG"
+docker push so1s-registry:5000/$MODEL_NAME:$TAG
 
 exit 0
