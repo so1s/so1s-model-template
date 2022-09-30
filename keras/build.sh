@@ -8,7 +8,7 @@ MODEL_NAME=""
 TAG=""
 
 # 0. parsed options
-while (("$#")); do
+while [ "$#" != 0]; do
     case "$1" in
         -f|--file) # download files
             if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
