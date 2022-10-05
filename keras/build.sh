@@ -6,6 +6,9 @@ INPUT_TYPE=""
 OUTPUT_TYPE=""
 MODEL_NAME=""
 TAG=""
+USERNAME=""
+PASSWORD=""
+REGISTRY=""
 
 # 0. parsed options
 while (("$#")); do
@@ -15,7 +18,7 @@ while (("$#")); do
                 FILE_URL=$2
                 shift 2
             else
-                echo "Error : please input '-f {FILE_URL}' Argument." >&2
+                echo "Error : please input '-f|--file {FILE_URL}' Argument." >&2
                 exit 1
             fi
             ;;
@@ -24,7 +27,7 @@ while (("$#")); do
                 INPUT_TYPE=$2
                 shift 2
             else
-                echo "Error : please input '-i {INPUT_TYPE}' Argument." >&2
+                echo "Error : please input '-i|--input {INPUT_TYPE}' Argument." >&2
                 exit 1
             fi
             ;;
@@ -33,7 +36,7 @@ while (("$#")); do
                 OUTPUT_TYPE=$2
                 shift 2
             else
-                echo "Error : please input '-o {OUTPUT_TYPE}' Argument." >&2
+                echo "Error : please input '-o|--output {OUTPUT_TYPE}' Argument." >&2
                 exit 1
             fi
             ;;
@@ -42,7 +45,7 @@ while (("$#")); do
                 MODEL_NAME=$2
                 shift 2
             else
-                echo "Error : please input '-n {MODEL_NAME}' Argument." >&2
+                echo "Error : please input '-n|--name {MODEL_NAME}' Argument." >&2
                 exit 1
             fi
             ;;
@@ -51,7 +54,34 @@ while (("$#")); do
                 TAG=$2
                 shift 2
             else
-                echo "Error : please input '-t {IMAGE_TAG}' Argument." >&2
+                echo "Error : please input '-t|--tag {IMAGE_TAG}' Argument." >&2
+                exit 1
+            fi
+            ;;
+        -u|--user) # set image registry password
+            if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+                USERNAME=$2
+                shift 2
+            else
+                echo "Error : please input '-u|--user {USERNAME}' Argument." >&2
+                exit 1
+            fi
+            ;;
+        -p|--password) # set image registry password
+            if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+                PASSWORD=$2
+                shift 2
+            else
+                echo "Error : please input '-p|--password {PASSWORD}' Argument." >&2
+                exit 1
+            fi
+            ;;
+        -r|--registry) # set image registry name
+            if [ -n "$2" ] && [ ${2:0:1} != "-" ]; then
+                REGISTRY=$2
+                shift 2
+            else
+                echo "Error : please input '-r|--registry {REGISTRY}' Argument." >&2
                 exit 1
             fi
             ;;
@@ -62,6 +92,8 @@ while (("$#")); do
             echo "      -o | --output     (set inference output type)" >&2
             echo "      -n | --name       (set model name)" >&2
             echo "      -t | --tag        (set image tag)" >&2
+            echo "      -u | --user       (set image registry username)" >&2
+            echo "      -p | --password   (set image registry password)" >&2
             exit 0
             ;;
         -*|--*) # unsupported flags
@@ -77,12 +109,22 @@ while (("$#")); do
     esac
 done
 
+IMAGE_TAG=""
+if [ -z $REGISTRY ]; then
+    IMAGE_TAG="${REGISTRY}/${USERNAME}/${MODEL_NAME}:${TAG}"
+else
+    IMAGE_TAG="${USERNAME}/${MODEL_NAME}:${TAG}"
+fi
+
 echo "===============================parsed options===============================" >&1
 echo "FILE_URL     : ${FILE_URL}" >&1
 echo "INPUT_TYPE   : $INPUT_TYPE" >&1
 echo "OUTPUT_TYPE  : ${OUTPUT_TYPE}" >&1
 echo "NAME         : ${MODEL_NAME}" >&1
 echo "TAG          : ${TAG}" >&1
+echo "USERNAME     : ${USERNAME}" >&1
+echo "REGISTRY     : ${REGISTRY}" >&1
+echo "IMAGE_TAG     : ${IMAGE_TAG}" >&1
 echo ""
 echo ""
 
@@ -107,6 +149,15 @@ if [ -z $TAG ];then
     echo "Please Input [ -t | --tag ] Options" >&2
     exit 1
 fi
+if [ -z $USERNAME ]; then
+    echo "Please Input [ -u | --user ] Options" >&2
+    exit 1
+fi
+if [ -z $PASSWORD ]; then
+    echo "Please Input [ -p | --password ] Options" >&2
+    exit 1
+fi
+
 
 
 # 1. move workdir & set ENV
@@ -151,12 +202,13 @@ bentoml build
 
 # 5. bentoml containerizing
 echo "============================CONTAINERIZATION START============================" >&1
-echo "bentoml containerize $MODEL_NAME:latest -t so1s-registry:5000/$MODEL_NAME:$TAG --network host --verbose --platform=linux/amd64" >&1
-bentoml containerize $MODEL_NAME:latest -t so1s-registry:5000/$MODEL_NAME:$TAG --network host --verbose --platform=linux/amd64
+echo "bentoml containerize $MODEL_NAME:latest -t ${IMAGE_TAG} --network host --verbose --platform=linux/amd64" >&1
+bentoml containerize $MODEL_NAME:latest -t ${IMAGE_TAG} --network host --verbose --platform=linux/amd64
 
 # 6. docker push
 echo "============================CONTAINERIZATION PUSH=============================" >&1
-echo "docker push so1s-registry:5000/$MODEL_NAME:$TAG"
-docker push so1s-registry:5000/$MODEL_NAME:$TAG
+echo "$PASSWORD" | docker login --username $USERNAME --password-stdin
+echo "docker push ${IMAGE_TAG}"
+docker push ${IMAGE_TAG}
 
 exit 0
