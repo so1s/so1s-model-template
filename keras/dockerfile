@@ -45,6 +45,7 @@ RUN pip3 install -r /apps/bento_requirements.txt
 ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 
 COPY ./build.sh /apps/build.sh
+RUN chmod +x /apps/build.sh
 
 # 4. bentoml bundling & containerizing
 # RUN python3.8 /apps/build_script.py &&\

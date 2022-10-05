@@ -7,7 +7,6 @@ include:
   - "*.txt"
 python:
   requirements_txt: "bento_requirements.txt"
-  pip_args: "--pre -U --force-reinstall"
 docker:
   env:
     - INPUT_TYPE={input_type}
