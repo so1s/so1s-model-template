@@ -1,0 +1,14 @@
+service: "build:svc"
+labels:
+  owner: so1s
+  stage: dev
+include:
+  - "*.py"
+  - "*.txt"
+python:
+  requirements_txt: "bento_requirements.txt"
+docker:
+  env:
+    - INPUT_TYPE={input_type}
+    - OUTPUT_TYPE={output_type}
+    - MODEL_NAME={model_name}
