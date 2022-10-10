@@ -12,3 +12,4 @@ docker:
     - INPUT_TYPE={input_type}
     - OUTPUT_TYPE={output_type}
     - MODEL_NAME={model_name}
+    - LIBRARY={library}

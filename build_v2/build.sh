@@ -212,7 +212,7 @@ python3.8 save.py
 
 # 4. bentoml build
 echo "=============================BENTOML BUILD SCRIPT=============================" >&1
-sed "s/{input_type}/$INPUT_TYPE/g;s/{output_type}/$OUTPUT_TYPE/g;s/{model_name}/$MODEL_NAME/g" bentofile.template > bentofile.yaml
+sed "s/{input_type}/$INPUT_TYPE/g;s/{output_type}/$OUTPUT_TYPE/g;s/{model_name}/$MODEL_NAME/g;s/{library}/$LIBRARY/g" bentofile.template > bentofile.yaml
 cat bentofile.yaml >&1
 echo "=============================BENTOML BUILD START==============================" >&1
 bentoml build
