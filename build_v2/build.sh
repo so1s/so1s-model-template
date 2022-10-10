@@ -261,6 +261,7 @@ export LIBRARY
 # python3.8 save.py
 
 # 4. bentoml build
+<<<<<<< HEAD
 echo "==================================BENTOML BUILD SCRIPT==================================" >&1
 if [ "$TYPE" == "cpu" ]; then
     sed "s/{input_type}/$INPUT_TYPE/g;s/{output_type}/$OUTPUT_TYPE/g;s/{model_name}/$MODEL_NAME/g;s/{library}/$LIBRARY/g" bentofile_cpu.template > bentofile.yaml
@@ -268,6 +269,10 @@ else
     sed "s/{input_type}/$INPUT_TYPE/g;s/{output_type}/$OUTPUT_TYPE/g;s/{model_name}/$MODEL_NAME/g;s/{library}/$LIBRARY/g" bentofile_gpu.template > bentofile.yaml
 fi
 echo "-------------bentofile.yaml--------------" >&1
+=======
+echo "=============================BENTOML BUILD SCRIPT=============================" >&1
+sed "s/{input_type}/$INPUT_TYPE/g;s/{output_type}/$OUTPUT_TYPE/g;s/{model_name}/$MODEL_NAME/g;s/{library}/$LIBRARY/g" bentofile.template > bentofile.yaml
+>>>>>>> 67f1062 (feat: add library settings)
 cat bentofile.yaml >&1
 echo "-----------Dockerfile.template-----------" >&1
 cat Dockerfile.template >&1
