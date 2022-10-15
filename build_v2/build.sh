@@ -214,7 +214,7 @@ esac
 
 echo "==============================Python Dependencies Install===============================" >&1
 if [ -e "requirements.txt" ]; then
-    cat requirements.txt | xargs -n 1 pip3 install
+    # cat requirements.txt | xargs -n 1 pip3 install
 
     PIP_PACKAGES=""
     EXTERNAL_DEPENDENCIES=""
