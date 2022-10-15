@@ -17,7 +17,9 @@ RUN apt install -y \
     sudo \
     wget \
     zip \
-    unzip
+    unzip \
+    libgl1-mesa-glx \
+    git
 
 # 2. docker install
 RUN mkdir -p /etc/apt/keyrings && \
@@ -37,15 +39,14 @@ RUN apt install -y \
 RUN apt install -y python3.8 python3-pip &&\
     python3.8 -m pip install --upgrade pip
 
-# 4. 
-COPY ./apps /apps
+COPY ./bento_requirements.txt /apps/bento_requirements.txt
 
 RUN pip3 install -r /apps/bento_requirements.txt
+# RUN cat /apps/bento_requirements.txt | xargs -n 1 pip3 install # if you download git+https://~~
 
 ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 
-COPY ./build.sh /apps/build.sh
+# 4. COPY FILES
+COPY ./apps/* /apps/
 
-# 4. bentoml bundling & containerizing
-# RUN python3.8 /apps/build_script.py &&\
-#     bentoml containerize TransformerService:latest -t build_testing:v1
+COPY ./build.sh /apps/build.sh

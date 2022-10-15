@@ -1,0 +1,5 @@
+{% extends bento_base_template %}
+{% block SETUP_BENTO_COMPONENTS %}
+{{ super() }}
+{external_python_packages}
+{% endblock %}
