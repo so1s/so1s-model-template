@@ -11,6 +11,7 @@ docker:
     - libglib2.0-0
   distro: debian
   python_version: "3.8.12"
+  dockerfile_template: "Dockerfile.template"
   env:
     - INPUT_TYPE={input_type}
     - OUTPUT_TYPE={output_type}
