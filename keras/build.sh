@@ -111,9 +111,9 @@ done
 
 IMAGE_TAG=""
 if [ -z $REGISTRY ]; then
-    IMAGE_TAG="${REGISTRY}/${USERNAME}/${MODEL_NAME}:${TAG}"
-else
     IMAGE_TAG="${USERNAME}/${MODEL_NAME}:${TAG}"
+else
+    IMAGE_TAG="${REGISTRY}/${USERNAME}/${MODEL_NAME}:${TAG}"
 fi
 
 echo "===============================parsed options===============================" >&1
