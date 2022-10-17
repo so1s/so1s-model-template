@@ -214,8 +214,6 @@ esac
 
 echo "==============================Python Dependencies Install===============================" >&1
 if [ -e "requirements.txt" ]; then
-    # cat requirements.txt | xargs -n 1 pip3 install
-
     PIP_PACKAGES=""
     EXTERNAL_DEPENDENCIES=""
 
@@ -250,7 +248,6 @@ if [ -e "requirements.txt" ]; then
 
     cat requirements.txt | xargs -n 1 pip3 install
 fi
-exit 0
 
 # 3. bentoml model save
 # echo "=================================Model SAVE to BentoML=================================" >&1

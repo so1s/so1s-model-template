@@ -17,13 +17,9 @@ RUN apt install -y \
     sudo \
     wget \
     zip \
-    <<<<<<< HEAD
     unzip \
     libgl1-mesa-glx \
     git
-=======
-    unzip
->>>>>>> b48f64a (feat: add support multiple framework (include detectron2))
 
 # 2. docker install
 RUN mkdir -p /etc/apt/keyrings && \
