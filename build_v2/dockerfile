@@ -1,0 +1,52 @@
+FROM ubuntu:20.04
+
+# 1. set install env
+WORKDIR /usr/src/builder
+
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Asia/Seoul
+
+RUN apt update -y
+
+RUN apt install -y \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release \
+    apt-transport-https \
+    sudo \
+    wget \
+    zip \
+    unzip \
+    libgl1-mesa-glx \
+    git
+
+# 2. docker install
+RUN mkdir -p /etc/apt/keyrings && \
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+RUN echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+    $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+RUN apt update -y
+
+RUN apt install -y \
+    docker-ce \
+    docker-ce-cli
+
+# 3. python install
+RUN apt install -y python3.8 python3-pip &&\
+    python3.8 -m pip install --upgrade pip
+
+COPY ./bento_requirements.txt /apps/bento_requirements.txt
+
+RUN pip3 install -r /apps/bento_requirements.txt
+# RUN cat /apps/bento_requirements.txt | xargs -n 1 pip3 install # if you download git+https://~~
+
+ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
+
+# 4. COPY FILES
+COPY ./apps/* /apps/
+
+COPY ./build.sh /apps/build.sh
