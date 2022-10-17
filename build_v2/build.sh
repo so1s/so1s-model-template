@@ -214,13 +214,10 @@ esac
 
 echo "==============================Python Dependencies Install===============================" >&1
 if [ -e "requirements.txt" ]; then
-    cat requirements.txt | xargs -n 1 pip3 install
-
     PIP_PACKAGES=""
     EXTERNAL_DEPENDENCIES=""
 
-    while read line
-    do
+    while IFS= read -r line; do
         if [ -z $line ]; then
             continue
         else
@@ -238,7 +235,7 @@ if [ -e "requirements.txt" ]; then
                 fi
             fi
         fi
-    done < requirements.txt
+    done <<< $(cat requirements.txt )
     EXTERNAL_DEPENDENCIES="$EXTERNAL_DEPENDENCIES\n{% endblock %}"
 
     echo "------------PIP PACKAGES------------"
@@ -248,6 +245,8 @@ if [ -e "requirements.txt" ]; then
     
     echo -e "$PIP_PACKAGES" >> bento_requirements.txt
     echo -e "$EXTERNAL_DEPENDENCIES" >> Dockerfile.template
+
+    cat requirements.txt | xargs -n 1 pip3 install
 fi
 
 # 3. bentoml model save
@@ -265,10 +264,12 @@ if [ "$TYPE" == "cpu" ]; then
 else
     sed "s/{input_type}/$INPUT_TYPE/g;s/{output_type}/$OUTPUT_TYPE/g;s/{model_name}/$MODEL_NAME/g;s/{library}/$LIBRARY/g" bentofile_gpu.template > bentofile.yaml
 fi
-echo "----------bentofile.yaml----------" >&1
+echo "-------------bentofile.yaml--------------" >&1
 cat bentofile.yaml >&1
-echo "--------Dockerfile.template-------" >&1
+echo "-----------Dockerfile.template-----------" >&1
 cat Dockerfile.template >&1
+echo "----------bento_requirements.txt---------" >&1
+cat bento_requirements.txt >&1
 
 echo "==================================BENTOML BUILD START===================================" >&1
 bentoml build
