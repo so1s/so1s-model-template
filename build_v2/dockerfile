@@ -17,7 +17,7 @@ RUN apt install -y \
     sudo \
     wget \
     zip \
-<<<<<<< HEAD
+    <<<<<<< HEAD
     unzip \
     libgl1-mesa-glx \
     git
@@ -43,7 +43,6 @@ RUN apt install -y \
 RUN apt install -y python3.8 python3-pip &&\
     python3.8 -m pip install --upgrade pip
 
-<<<<<<< HEAD
 COPY ./bento_requirements.txt /apps/bento_requirements.txt
 
 RUN pip3 install -r /apps/bento_requirements.txt
@@ -55,17 +54,3 @@ ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 COPY ./apps/* /apps/
 
 COPY ./build.sh /apps/build.sh
-=======
-# 4. 
-COPY ./apps /apps
-
-RUN pip3 install -r /apps/bento_requirements.txt
-
-ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
-
-COPY ./build.sh /apps/build.sh
-
-# 4. bentoml bundling & containerizing
-# RUN python3.8 /apps/build_script.py &&\
-#     bentoml containerize TransformerService:latest -t build_testing:v1
->>>>>>> b48f64a (feat: add support multiple framework (include detectron2))
