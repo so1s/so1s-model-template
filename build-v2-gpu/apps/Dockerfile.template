@@ -1,0 +1,3 @@
+{% extends bento_base_template %}
+{% block SETUP_BENTO_COMPONENTS %}
+{{ super() }}
