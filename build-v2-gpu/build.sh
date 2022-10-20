@@ -230,7 +230,7 @@ if [ -e "requirements.txt" ]; then
                 fi
             else
                 if [[ $line == *torch* ]]; then
-                    EXTRA_URL_INDEXES="    extra_index_url:\n    - \"https://download.pytorch.org/whl/cu113\""
+                    EXTRA_URL_INDEXES="    - \"https://download.pytorch.org/whl/cu113\"\n"
                 fi
 
                 if [ -z $PIP_PACKAGES ]; then
@@ -252,6 +252,7 @@ if [ -e "requirements.txt" ]; then
     echo -e "$EXTERNAL_DEPENDENCIES" >> Dockerfile.template
 
     if [ -z $EXTRA_URL_INDEXES ]; then
+        echo -e "    extra_index_url:\n" >> bentofile.template
         echo -e "$EXTRA_URL_INDEXES" >> bentofile.template
     fi
 

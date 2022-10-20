@@ -20,5 +20,4 @@ docker:
     - LIBRARY={library}
 python:
     requirements_txt: "bento_requirements.txt"
-    extra_index_url:
-    - "https://download.pytorch.org/whl/cu113"
+    
