@@ -216,18 +216,23 @@ echo "==============================Python Dependencies Install=================
 if [ -e "requirements.txt" ]; then
     PIP_PACKAGES=""
     EXTERNAL_DEPENDENCIES=""
+    EXTRA_URL_INDEXES=""
 
     while IFS= read -r line; do
         if [ -z $line ]; then
             continue
         else
-            if [[ $line == *http* ]]; then
+            if [[ $line == *git* ]]; then
                 if [ -z $EXTERNAL_DEPENDENCIES ]; then
                     EXTERNAL_DEPENDENCIES="RUN pip install $line"
                 else
                     EXTERNAL_DEPENDENCIES="$EXTERNAL_DEPENDENCIES\nRUN pip install $line"
                 fi
             else
+                if [[ $line == *torch* ]]; then
+                    EXTRA_URL_INDEXES="    extra_index_url:\n    - \"https://download.pytorch.org/whl/cu113\""
+                fi
+
                 if [ -z $PIP_PACKAGES ]; then
                     PIP_PACKAGES="$line"
                 else
@@ -245,6 +250,10 @@ if [ -e "requirements.txt" ]; then
     
     echo -e "$PIP_PACKAGES" >> bento_requirements.txt
     echo -e "$EXTERNAL_DEPENDENCIES" >> Dockerfile.template
+
+    if [ -z $EXTRA_URL_INDEXES ]; then
+        echo -e "$EXTRA_URL_INDEXES" >> bentofile.template
+    fi
 
     cat requirements.txt | xargs -n 1 pip3 install
 fi
