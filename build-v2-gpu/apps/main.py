@@ -13,6 +13,4 @@ svc = bentoml.Service(model_name)
 
 @svc.api(input=input_type, output=output_type)
 def predict(input):
-    model_input = prepared.pre_processing(input)
-    model_output = prepared.predict(model, model_input)
-    return prepared.post_processing(model_output)
+    return prepared.run(artifacts, input)
