@@ -243,17 +243,20 @@ if [ -e "requirements.txt" ]; then
     done <<< $(cat requirements.txt )
     EXTERNAL_DEPENDENCIES="$EXTERNAL_DEPENDENCIES\n{% endblock %}"
 
-    echo "------------PIP PACKAGES------------"
-    echo -e "$PIP_PACKAGES"
-    echo "--------EXTERNAL DEPENDENCIES--------"
-    echo -e "$EXTERNAL_DEPENDENCIES"
+    echo "------------PIP PACKAGES------------" >&1
+    echo -e "$PIP_PACKAGES" >&1
+    echo "--------EXTERNAL DEPENDENCIES--------" >&1
+    echo -e "$EXTERNAL_DEPENDENCIES" >&1
+    echo "----------EXTRA URL INDEXES----------" >&1
+    echo -e "$EXTRA_URL_INDEXES" >&1
     
     echo -e "$PIP_PACKAGES" >> bento_requirements.txt
     echo -e "$EXTERNAL_DEPENDENCIES" >> Dockerfile.template
 
-    if [ -z $EXTRA_URL_INDEXES ]; then
-        echo -e "    extra_index_url:\n" >> bentofile.template
-        echo -e "$EXTRA_URL_INDEXES" >> bentofile.template
+    if [ -n "$EXTRA_URL_INDEXES" ]; then
+        echo -e "    extra_index_url:\n$EXTRA_URL_INDEXES" >> bentofile.template
+        echo "----------bento file changed----------" >&1
+        cat bentofile.template >&1
     fi
 
     cat requirements.txt | xargs -n 1 pip3 install
