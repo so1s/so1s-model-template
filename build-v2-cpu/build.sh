@@ -259,11 +259,8 @@ export LIBRARY
 
 # 4. bentoml build
 echo "==================================BENTOML BUILD SCRIPT==================================" >&1
-if [ "$TYPE" == "cpu" ]; then
-    sed "s/{input_type}/$INPUT_TYPE/g;s/{output_type}/$OUTPUT_TYPE/g;s/{model_name}/$MODEL_NAME/g;s/{library}/$LIBRARY/g" bentofile_cpu.template > bentofile.yaml
-else
-    sed "s/{input_type}/$INPUT_TYPE/g;s/{output_type}/$OUTPUT_TYPE/g;s/{model_name}/$MODEL_NAME/g;s/{library}/$LIBRARY/g" bentofile_gpu.template > bentofile.yaml
-fi
+sed "s/{input_type}/$INPUT_TYPE/g;s/{output_type}/$OUTPUT_TYPE/g;s/{model_name}/$MODEL_NAME/g;s/{library}/$LIBRARY/g" bentofile.template > bentofile.yaml
+
 echo "-------------bentofile.yaml--------------" >&1
 cat bentofile.yaml >&1
 echo "-----------Dockerfile.template-----------" >&1
