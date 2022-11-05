@@ -8,9 +8,13 @@ output_type = utils.get_data_type(os.environ['OUTPUT_TYPE'])
 model_name = os.environ['MODEL_NAME']
 library = os.environ['LIBRARY']
 
-artifacts = prepared.load_artifacts()
+global artifacts
+artifacts = None
 svc = bentoml.Service(model_name)
 
 @svc.api(input=input_type, output=output_type)
 def predict(input):
-    return prepared.run(artifacts, input)
+    global artifacts
+    if artifacts is None:
+        artifacts = prepared.load_artifacts()
+    return prepared.run(artifacts=artifacts, input=input)
