@@ -17,4 +17,4 @@ def predict(input):
     global artifacts
     if artifacts is None:
         artifacts = prepared.load_artifacts()
-    return prepared.run(artifacts=artifacts, input=input)
+    return prepared.run(artifacts, input)
