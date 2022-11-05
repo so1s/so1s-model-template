@@ -1,5 +1,6 @@
 import os
 import bentoml
+from bentoml.io import Text, IODescriptor
 import prepared
 import utils
 
@@ -16,5 +17,12 @@ svc = bentoml.Service(model_name)
 def predict(input):
     global artifacts
     if artifacts is None:
-        artifacts = prepared.load_artifacts()
+        load("load")
     return prepared.run(artifacts, input)
+
+@svc.api(input=Text(), output=Text())
+def load(input):
+    global artifacts
+    if artifacts is None:
+        artifacts = prepared.load_artifacts()
+    return "load success"
