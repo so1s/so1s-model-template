@@ -229,8 +229,16 @@ if [ -e "requirements.txt" ]; then
                     EXTERNAL_DEPENDENCIES="$EXTERNAL_DEPENDENCIES\nRUN pip install $line"
                 fi
             else
-                if [[ $line == *torch* ]]; then
-                    EXTRA_URL_INDEXES="    - \"https://download.pytorch.org/whl/cu113\"\n"
+                if [ -z $EXTRA_URL_INDEXES ]; then
+                    if [[ $line == *cu116* ]]; then
+                        EXTRA_URL_INDEXES="https://download.pytorch.org/whl/cu116"
+                    # elif [[ $line == *cu113* ]]; then
+                    #     EXTRA_URL_INDEXES="https://download.pytorch.org/whl/cu113"
+                    # elif [[ $line == *cu102* ]]; then
+                    #     EXTRA_URL_INDEXES="https://download.pytorch.org/whl/cu102"
+                    # elif [[ $line == *cpu* ]]; then
+                    #     EXTRA_URL_INDEXES="https://download.pytorch.org/whl/cpu"
+                    fi
                 fi
 
                 if [ -z $PIP_PACKAGES ]; then
@@ -254,12 +262,14 @@ if [ -e "requirements.txt" ]; then
     echo -e "$EXTERNAL_DEPENDENCIES" >> Dockerfile.template
 
     if [ -n "$EXTRA_URL_INDEXES" ]; then
-        echo -e "    extra_index_url:\n$EXTRA_URL_INDEXES" >> bentofile.template
+        echo -e "    extra_index_url:\n    - \"$EXTRA_URL_INDEXES\"" >> bentofile.template
         echo "----------bento file changed----------" >&1
         cat bentofile.template >&1
-    fi
 
-    cat requirements.txt | xargs -n 1 pip3 install
+        cat requirements.txt | xargs -n 1 pip3 install --extra-index-url $EXTRA_URL_INDEXES
+    else
+        cat requirements.txt | xargs -n 1 pip3 install
+    fi
 fi
 
 # 3. bentoml model save
