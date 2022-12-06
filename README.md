@@ -1,6 +1,7 @@
 ## So1s Model Templates
 
 모델 컨테이너라이즈를 위한 보일러플레이트 템플릿입니다.
+
 Dockerfile, BentoML 관련 코드 연동이 완료되면 가중치 파일을 포함한 프로젝트를 tar | zip 포맷으로 압축하신 뒤, [Web UI](https://github.com/so1s/so1s-frontend) 기반 패키지 업로드를 통해 클러스터 내부에서 빌드 및 업로드, 서빙이 가능합니다.
 
 ## 지원 사양
