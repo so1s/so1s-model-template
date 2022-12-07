@@ -300,8 +300,8 @@ echo "bentoml containerize $MODEL_NAME:latest -t ${IMAGE_TAG} --network host --v
 bentoml containerize $MODEL_NAME:latest -t ${IMAGE_TAG} --network host --verbose --platform=linux/amd64
 
 # 6. docker push
-echo "=================================CONTAINERIZATION PUSH==================================" >&1
-echo "$PASSWORD" | docker login --username $USERNAME --password-stdin
+echo "============================CONTAINERIZATION PUSH=============================" >&1
+echo "$PASSWORD" | docker login $REGISTRY --username $USERNAME --password-stdin
 echo "docker push ${IMAGE_TAG}"
 docker push ${IMAGE_TAG}
 
