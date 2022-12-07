@@ -2,10 +2,6 @@ name: CD
 on:
   workflow_dispatch: # Enable manual execution
   push:
-    branches:
-      - cpu
-      - gpu
-      - tensorflow
     tags:
       - '**'
 
