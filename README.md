@@ -8,6 +8,8 @@
 
 </div>
 
+모델 컨테이너라이즈를 위한 보일러플레이트 템플릿입니다.
+
 ## 지원 사양
 - [Basic CPU Template](https://github.com/so1s/so1s-model-templates/tree/cpu)
 - [Basic GPU Template](https://github.com/so1s/so1s-model-templates/tree/gpu)
