@@ -4,11 +4,11 @@
 
 # So1s Model Templates
 
+모델 컨테이너라이즈를 위한 보일러플레이트 템플릿
+
 [프로젝트 소개 페이지로 돌아가기](https://github.com/so1s)
-
+  
 </div>
-
-모델 컨테이너라이즈를 위한 보일러플레이트 템플릿입니다.
 
 ## 지원 사양
 - [Basic CPU Template](https://github.com/so1s/so1s-model-templates/tree/cpu)
