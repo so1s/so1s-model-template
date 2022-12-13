@@ -14,7 +14,7 @@
 
 [Github Packages](https://github.com/so1s/so1s-model-template/pkgs/container/model-templates)로 배포되어 있어 Base Image로 사용하시는 것이 가능합니다.
 
-Repo Clone을 통한 보일러플레이트를 ML 프로젝트에 연동하셔서 사용하시는 것도 가능합니다.
+이 레포는 Public Template으로 제공됩니다. 보일러플레이트로 사용하시려면 상단의 `Use This Template` 버튼을 눌러주세요!
 
 ## 지원 사양
 - [Basic CPU Template](https://github.com/so1s/so1s-model-template/tree/cpu)
