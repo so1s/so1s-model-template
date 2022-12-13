@@ -31,4 +31,4 @@ jobs:
           file: ./src/dockerfile
           push: true
           tags: |
-            ghcr.io/so1s/model-templates:${{ github.ref_name }}
+            ghcr.io/so1s/model-template:${{ github.ref_name }}
