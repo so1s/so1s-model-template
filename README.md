@@ -12,12 +12,13 @@
 
 ## 사용 방법
 
-[Github Packages](https://github.com/so1s/so1s-model-templates/pkgs/container/model-templates)로 배포되어 있어 Base Image로 사용하시는 것이 가능합니다.
+[Github Packages](https://github.com/so1s/so1s-model-template/pkgs/container/model-templates)로 배포되어 있어 Base Image로 사용하시는 것이 가능합니다.
 
 Repo Clone을 통한 보일러플레이트를 ML 프로젝트에 연동하셔서 사용하시는 것도 가능합니다.
 
 ## 지원 사양
-- [Basic CPU Template](https://github.com/so1s/so1s-model-templates/tree/cpu)
-- [Basic GPU Template](https://github.com/so1s/so1s-model-templates/tree/gpu)
+- [Basic CPU Template](https://github.com/so1s/so1s-model-template/tree/cpu)
+- [Basic GPU Template](https://github.com/so1s/so1s-model-template/tree/gpu)
+- [Tensorflow Template](https://github.com/so1s/so1s-model-template/tree/tensorflow)
 
 그 외에도 코드 수정을 통한 자유로운 바인딩이 가능합니다.
